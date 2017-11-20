@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="100.0" prefHeight="643.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andreas.rockpaperscissors.view.MainView">
+   <center>
+      <GridPane fx:id="gridPane" alignment="CENTER" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Text fx:id="totalText" strokeType="OUTSIDE" strokeWidth="0.0" text="Total 0" />
+                  <Text fx:id="roundText" strokeType="OUTSIDE" strokeWidth="0.0" text="Round 0" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="3">
+               <children>
+                  <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" text="IP-address" />
+                  <Text fx:id="portText" strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
+               </children>
+            </VBox>
+            <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </children>
+      </GridPane>
+   </center>
+   <right>
+      <VBox fx:id="connectBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="connectButton" alignment="CENTER" mnemonicParsing="false" onAction="#connectButtonClicked" prefWidth="150.0" text="Connect">
+               <tooltip>
+                  <Tooltip text="Click here to connect to someone" />
+               </tooltip>
+            </Button>
+            <ListView fx:id="playerList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </right>
+   <bottom>
+      <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane fx:id="buttonGrid">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="rockButton" mnemonicParsing="false" onAction="#playRock" prefHeight="100.0" prefWidth="100.0" text="Rock" GridPane.halignment="CENTER" />
+                  <Button fx:id="paperButton" mnemonicParsing="false" onAction="#playPaper" prefHeight="100.0" prefWidth="100.0" text="Paper" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Button fx:id="scissorsButton" mnemonicParsing="false" onAction="#playScissors" prefHeight="100.0" prefWidth="100.0" text="Scissors" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+               </children>
+            </GridPane>
+            <GridPane fx:id="chatGrid" prefHeight="150.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextArea fx:id="messages" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS" />
+                  <TextField fx:id="messageField" onAction="#sendChatMessage" promptText="Type chat message" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                  <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendChatMessage" prefWidth="100.0" text="Send" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>
