@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.startup;
+package com.andreas.nonblockingrps.startup;
 
 import com.andreas.nonblockingrps.view.ViewCoordinator;
 import javafx.application.Application;

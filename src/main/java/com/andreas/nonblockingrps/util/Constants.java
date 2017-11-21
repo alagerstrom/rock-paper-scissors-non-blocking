@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.util;
+package com.andreas.nonblockingrps.util;
 
 public class Constants {
     public static final String WINDOW_TITLE = "Rock Paper Scissors";

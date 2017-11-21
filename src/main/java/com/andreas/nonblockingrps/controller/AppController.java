@@ -1,5 +1,6 @@
-package main.java.com.andreas.rockpaperscissors.controller;
+package com.andreas.nonblockingrps.controller;
 
+import com.andreas.nonblockingrps.model.*;
 import com.andreas.nonblockingrps.util.Constants;
 import com.andreas.nonblockingrps.util.Logger;
 
@@ -8,7 +9,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class AppController implements GameObserver{
+public class AppController implements GameObserver {
     private final static AppController instance = new AppController();
 
     private Game game;

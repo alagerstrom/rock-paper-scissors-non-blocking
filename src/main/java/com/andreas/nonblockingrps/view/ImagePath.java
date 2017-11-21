@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.view;
+package com.andreas.nonblockingrps.view;
 
 public enum ImagePath {
     PAPER("/images/paper.png"),

@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.util;
+package com.andreas.nonblockingrps.util;
 
 public class Logger {
     private static final boolean LOG = true;

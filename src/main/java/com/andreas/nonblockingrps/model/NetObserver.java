@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.model;
+package com.andreas.nonblockingrps.model;
 
 
 public interface NetObserver {

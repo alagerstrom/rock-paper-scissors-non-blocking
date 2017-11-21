@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.view;
+package com.andreas.nonblockingrps.view;
 
 public enum ViewPath {
     MAIN_VIEW("/fxml/main_view.fxml"),

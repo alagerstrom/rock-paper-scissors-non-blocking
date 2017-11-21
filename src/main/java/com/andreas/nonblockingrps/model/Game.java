@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.model;
+package com.andreas.nonblockingrps.model;
 
 import com.andreas.nonblockingrps.util.Constants;
 import com.andreas.nonblockingrps.util.Logger;

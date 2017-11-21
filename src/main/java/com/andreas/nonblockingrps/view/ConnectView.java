@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.view;
+package com.andreas.nonblockingrps.view;
 
 import com.andreas.nonblockingrps.controller.AppController;
 import javafx.application.Platform;
