@@ -1,4 +1,4 @@
-package main.java.com.andreas.rockpaperscissors.net;
+package com.andreas.nonblockingrps.net;
 
 public enum NetMessageType {
     MESSAGE,

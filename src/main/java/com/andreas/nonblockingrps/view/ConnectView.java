@@ -1,6 +1,6 @@
 package main.java.com.andreas.rockpaperscissors.view;
 
-import com.andreas.rockpaperscissors.controller.AppController;
+import com.andreas.nonblockingrps.controller.AppController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,8 +8,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import com.andreas.rockpaperscissors.util.Constants;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Constants;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.io.IOException;
 import java.nio.channels.CompletionHandler;

@@ -1,8 +1,8 @@
 package main.java.com.andreas.rockpaperscissors.view;
 
-import com.andreas.rockpaperscissors.controller.AppController;
-import com.andreas.rockpaperscissors.model.GameObserver;
-import com.andreas.rockpaperscissors.util.Constants;
+import com.andreas.nonblockingrps.controller.AppController;
+import com.andreas.nonblockingrps.model.GameObserver;
+import com.andreas.nonblockingrps.util.Constants;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.nio.channels.CompletionHandler;
 import java.util.List;

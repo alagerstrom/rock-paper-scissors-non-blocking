@@ -1,6 +1,6 @@
 package main.java.com.andreas.rockpaperscissors.model;
 
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.util.*;
 

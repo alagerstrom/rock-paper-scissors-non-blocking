@@ -2,10 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="100.0" prefHeight="643.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andreas.rockpaperscissors.view.MainView">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="100.0" minWidth="100.0" prefHeight="643.0" prefWidth="446.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andreas.nonblockingrps.view.MainView">
    <center>
       <GridPane fx:id="gridPane" alignment="CENTER" BorderPane.alignment="CENTER">
         <columnConstraints>

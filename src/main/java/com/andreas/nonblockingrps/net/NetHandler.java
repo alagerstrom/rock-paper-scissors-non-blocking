@@ -1,7 +1,7 @@
-package main.java.com.andreas.rockpaperscissors.net;
+package com.andreas.nonblockingrps.net;
 
-import com.andreas.rockpaperscissors.util.Constants;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Constants;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.io.IOException;
 import java.net.*;

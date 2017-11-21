@@ -1,7 +1,7 @@
 package main.java.com.andreas.rockpaperscissors.view;
 
-import com.andreas.rockpaperscissors.util.Constants;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Constants;
+import com.andreas.nonblockingrps.util.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

@@ -1,8 +1,8 @@
 package main.java.com.andreas.rockpaperscissors.view;
 
-import com.andreas.rockpaperscissors.controller.AppController;
-import com.andreas.rockpaperscissors.util.Constants;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.controller.AppController;
+import com.andreas.nonblockingrps.util.Constants;
+import com.andreas.nonblockingrps.util.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

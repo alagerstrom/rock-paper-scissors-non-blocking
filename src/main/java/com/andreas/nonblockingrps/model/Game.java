@@ -1,7 +1,7 @@
 package main.java.com.andreas.rockpaperscissors.model;
 
-import com.andreas.rockpaperscissors.util.Constants;
-import com.andreas.rockpaperscissors.util.Logger;
+import com.andreas.nonblockingrps.util.Constants;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

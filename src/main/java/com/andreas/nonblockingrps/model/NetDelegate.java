@@ -1,6 +1,6 @@
 package main.java.com.andreas.rockpaperscissors.model;
 
-import com.andreas.rockpaperscissors.net.NetHandler;
+import com.andreas.nonblockingrps.net.NetHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
