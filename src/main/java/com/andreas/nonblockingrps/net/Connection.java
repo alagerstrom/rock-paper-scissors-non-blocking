@@ -1,55 +1,37 @@
 package com.andreas.nonblockingrps.net;
 
-import com.andreas.nonblockingrps.util.Logger;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
-public class Connection<T> extends Service {
+public class Connection<T> extends ChannelInboundHandlerAdapter{
 
-    private final Socket socket;
-    private final NetHandler netHandler;
-    private final ObjectInputStream inputStream;
-    private final ObjectOutputStream outputStream;
+    private final NetHandler<T> netHandler;
+    private final Channel channel;
 
 
-    Connection(Socket socket, NetHandler netHandler) throws IOException {
+    Connection(Channel channel, NetHandler netHandler) throws IOException {
+        this.channel = channel;
         this.netHandler = netHandler;
-        this.socket = socket;
-        outputStream = new ObjectOutputStream(socket.getOutputStream());
-        inputStream = new ObjectInputStream(socket.getInputStream());
-        start();
     }
 
     @Override
-    protected Task createTask() {
-        return new Task() {
-            @Override
-            protected Object call() throws Exception {
-                Logger.log("Connection running");
-                while (true){
-                    try{
-                        NetMessage netMessage = (NetMessage) inputStream.readObject();
-                        netHandler.handleIncomingMessage(netMessage);
-                    }catch (EOFException e){
-                        Logger.log("Removing connection " + socket.getInetAddress() + ":" + socket.getPort());
-                        netHandler.removeConnection(Connection.this);
-                        break;
-                    }catch (Exception e){
-                        throw new NetException(e.getMessage());
-                    }
-                }
-                return null;
-            }
-        };
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+        NetMessage message = (NetMessage) msg;
+        netHandler.handleIncomingMessage(message);
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
+        ctx.close();
+    }
+
+
     public synchronized void send(NetMessage netMessage) throws IOException {
-        outputStream.writeObject(netMessage);
+        channel.writeAndFlush(netMessage);
     }
 }

@@ -1,8 +1,10 @@
 package com.andreas.nonblockingrps.model;
 
 import com.andreas.nonblockingrps.net.NetHandler;
+import com.andreas.nonblockingrps.util.Logger;
 
 import java.io.IOException;
+import java.nio.channels.CompletionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +15,9 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
     private NetHandler<Message> netHandler;
     private String uniqueName;
 
-    public NetDelegate(int port) throws IOException {
+    public NetDelegate(int port) {
         netHandler = new NetHandler<>(port, this);
+
         uniqueName = netHandler.getUniqueName();
     }
 
@@ -89,4 +92,7 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
     }
 
 
+    public void startAccepting(CompletionHandler<Void, Void> completionHandler) {
+        netHandler.startAcceptingIncomingConnections(completionHandler);
+    }
 }

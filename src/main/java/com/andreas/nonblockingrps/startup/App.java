@@ -14,7 +14,5 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ViewCoordinator.getInstance().start();
-        com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-        application.setQuitHandler((quitEvent, quitResponse) -> Platform.exit());
     }
 }

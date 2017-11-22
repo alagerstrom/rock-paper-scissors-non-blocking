@@ -26,21 +26,26 @@ public class AppController implements GameObserver {
     public void createNewGame(String playerName, int port, CompletionHandler<Void, Void> completionHandler) {
         CompletableFuture.runAsync(() -> {
 
-            try {
-                netDelegate = new NetDelegate(port);
-            } catch (IOException e) {
-                completionHandler.failed(e, null);
-            }
+            netDelegate = new NetDelegate(port);
 
-            String uniqueName = netDelegate.getUniqueName();
-            game = new Game(playerName, uniqueName);
-            game.addGameObserver(this);
-            try {
-                Thread.sleep(Constants.FAKE_NETWORK_DELAY);
-            } catch (InterruptedException ignored) {
-            }
-            netDelegate.addNetObserver(game);
-            completionHandler.completed(null, null);
+            netDelegate.startAccepting(new CompletionHandler<Void, Void>() {
+                @Override
+                public void completed(Void result, Void attachment) {
+                    String uniqueName = netDelegate.getUniqueName();
+                    game = new Game(playerName, uniqueName);
+                    game.addGameObserver(AppController.this);
+                    netDelegate.addNetObserver(game);
+                    completionHandler.completed(null, null);
+                }
+
+                @Override
+                public void failed(Throwable exc, Void attachment) {
+                    completionHandler.failed(exc, null);
+                }
+            });
+
+
+
         });
     }
 

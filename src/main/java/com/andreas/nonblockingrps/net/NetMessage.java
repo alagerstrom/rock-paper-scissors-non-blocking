@@ -2,7 +2,7 @@ package com.andreas.nonblockingrps.net;
 
 import java.io.Serializable;
 
-public class NetMessage<T> implements Serializable{
+public class NetMessage<T> implements Serializable {
     private NetMessageType type;
     private int number;
     private Peer sender;
@@ -48,4 +48,8 @@ public class NetMessage<T> implements Serializable{
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "[NETMESSAGE] " + sender + " " + content;
+    }
 }

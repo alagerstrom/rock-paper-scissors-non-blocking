@@ -2,14 +2,27 @@ package com.andreas.nonblockingrps.net;
 
 import com.andreas.nonblockingrps.util.Constants;
 import com.andreas.nonblockingrps.util.Logger;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import java.io.IOException;
 import java.net.*;
+import java.nio.channels.CompletionHandler;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NetHandler<T> {
-    private ServerSocket serverSocket;
     private final List<Connection> connections = new ArrayList<>();
 
     private int sendMessageCounter;
@@ -19,14 +32,14 @@ public class NetHandler<T> {
     private final Peer peer;
     private final String ip;
     private final String uniqueName;
+    private int localPort;
 
-    public NetHandler(int port, Delegate<T> delegate) throws IOException {
+    public NetHandler(int port, Delegate<T> delegate) {
         ip = createIpAddress();
         this.delegate = delegate;
         uniqueName = createUniqueName(port);
         this.peer = new Peer(uniqueName);
-        serverSocket = new ServerSocket(port);
-        new AcceptService(serverSocket, this).start();
+        localPort = port;
         startSendingHeartbeats();
     }
 
@@ -104,7 +117,7 @@ public class NetHandler<T> {
         return ip;
     }
     public int getLocalPort(){
-        return serverSocket.getLocalPort();
+        return localPort;
     }
 
     public String getUniqueName(){
@@ -117,16 +130,37 @@ public class NetHandler<T> {
         }
     }
 
-    synchronized void addConnection(Socket socket) throws IOException {
-        Logger.log("Adding connection...");
-        connections.add(new Connection(socket, this));
-
+    synchronized Connection addConnection(SocketChannel socketChannel) throws IOException {
+        Connection connection = new Connection(socketChannel, NetHandler.this);
+        synchronized (connections){
+            connections.add(connection);
+        }
+        return connection;
     }
 
     public void connectTo(String host, int port) throws IOException {
-        Socket socket = new Socket();
-        socket.connect(new InetSocketAddress(host, port), Constants.CONNECT_TIMEOUT_MS);
-        connections.add(new Connection(socket, this));
+        Logger.log("Connecting to " + host + " " + port);
+
+        EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap clientBootstrap = new Bootstrap();
+            clientBootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Constants.CONNECT_TIMEOUT_MS);
+
+            clientBootstrap.group(group);
+            clientBootstrap.channel(NioSocketChannel.class);
+            clientBootstrap.handler(new ChannelInitializer<SocketChannel>() {
+                protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    socketChannel.pipeline().addLast(
+                            new ObjectEncoder(),
+                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            addConnection(socketChannel));
+                }
+            });
+            clientBootstrap.connect(host, port).sync();
+
+        } catch (InterruptedException e) {
+            throw new IOException();
+        }
     }
 
     private void broadcast(NetMessage<T> netMessage) throws IOException {
@@ -188,5 +222,34 @@ public class NetHandler<T> {
         netMessage.setSender(peer);
         broadcast(netMessage);
     }
+
+
+    public void startAcceptingIncomingConnections(CompletionHandler<Void, Void> completionHandler) {
+        try{
+            EventLoopGroup group = new NioEventLoopGroup();
+            EventLoopGroup group2 = new NioEventLoopGroup();
+
+            ServerBootstrap serverBootstrap = new ServerBootstrap()
+                    .group(group, group2)
+                    .channel(NioServerSocketChannel.class);
+            serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
+                protected void initChannel(SocketChannel socketChannel) throws Exception {
+
+                    socketChannel.pipeline().addLast(
+                            new ObjectEncoder(),
+                            new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                            addConnection(socketChannel));
+
+                }
+            });
+            ChannelFuture channelFuture = serverBootstrap.localAddress(localPort).bind().sync();
+            completionHandler.completed(null, null);
+            channelFuture.channel().closeFuture().sync();
+        }catch (Exception e){
+            completionHandler.failed(e, null);
+        }
+
+    }
+
 
 }
