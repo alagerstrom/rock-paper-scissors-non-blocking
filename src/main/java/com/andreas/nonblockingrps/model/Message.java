@@ -2,7 +2,7 @@ package com.andreas.nonblockingrps.model;
 
 import java.io.Serializable;
 
-public class Message implements Serializable{
+public class Message implements Serializable {
     private MessageType type;
     private String content;
     private Player sender;
@@ -21,7 +21,8 @@ public class Message implements Serializable{
         this.type = type;
         return this;
     }
-    public Message setGameRound(GameRoundDTO gameRound){
+
+    public Message setGameRound(GameRoundDTO gameRound) {
         this.gameRound = gameRound;
         return this;
     }

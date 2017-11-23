@@ -9,8 +9,6 @@ public enum ImagePath {
 
     String name;
 
-
-
     ImagePath(String s) {
         this.name = s;
     }

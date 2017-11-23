@@ -2,7 +2,7 @@ package com.andreas.nonblockingrps.net;
 
 import java.io.Serializable;
 
-public class Peer implements Serializable{
+public class Peer implements Serializable {
     private final String name;
 
     public Peer(String name) {
@@ -17,7 +17,6 @@ public class Peer implements Serializable{
     public String toString() {
         return "[Peer " + name + "]";
     }
-
 
     @Override
     public boolean equals(Object obj) {

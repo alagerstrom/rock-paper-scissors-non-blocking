@@ -88,7 +88,6 @@ public class Game implements NetObserver {
         }
     }
 
-
     @Override
     public void playerNotResponding(String uniqueName) {
         Player deadPlayer = new Player("Unknown", uniqueName);

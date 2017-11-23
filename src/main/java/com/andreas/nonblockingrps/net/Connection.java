@@ -6,22 +6,20 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.io.IOException;
 
-public class Connection<T> extends ChannelInboundHandlerAdapter{
+public class Connection<T> extends ChannelInboundHandlerAdapter {
 
     private final NetHandler<T> netHandler;
     private final Channel channel;
 
-
-    Connection(Channel channel, NetHandler netHandler) throws IOException {
+    Connection(Channel channel, NetHandler<T> netHandler) throws IOException {
         this.channel = channel;
         this.netHandler = netHandler;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        NetMessage message = (NetMessage) msg;
-        netHandler.handleIncomingMessage(message);
+        NetMessage netMessage = (NetMessage) msg;
+        netHandler.handleIncomingMessage(netMessage);
     }
 
     @Override
@@ -30,8 +28,7 @@ public class Connection<T> extends ChannelInboundHandlerAdapter{
         ctx.close();
     }
 
-
-    public synchronized void send(NetMessage netMessage) throws IOException {
+    synchronized void send(NetMessage netMessage) throws IOException {
         channel.writeAndFlush(netMessage);
     }
 }

@@ -103,7 +103,7 @@ class GameRound {
             players.add(player);
     }
 
-    public GameRoundDTO getDTO(){
+    public GameRoundDTO getDTO() {
         return new GameRoundDTO(players, playCommandMap);
     }
 }

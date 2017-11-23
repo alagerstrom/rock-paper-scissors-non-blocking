@@ -17,14 +17,14 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.channels.CompletionHandler;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NetHandler<T> {
     private final List<Connection> connections = new ArrayList<>();
-
     private int sendMessageCounter;
     private final ArrayList<Peer> knownPeers = new ArrayList<>();
     private final ConcurrentHashMap<Peer, Long> lastTimeHeardFromPeer = new ConcurrentHashMap<>();
@@ -43,7 +43,7 @@ public class NetHandler<T> {
         startSendingHeartbeats();
     }
 
-    private String createIpAddress(){
+    private String createIpAddress() {
         String ipAddress;
         try {
             ipAddress = InetAddress.getLocalHost().toString();
@@ -54,18 +54,19 @@ public class NetHandler<T> {
         return ipAddress;
     }
 
-    private String createUniqueName(int port){
+    private String createUniqueName(int port) {
         return ip + " " + port + " ";
     }
 
     private Delegate<T> delegate;
+
     public interface Delegate<T> {
         void onNewMessage(T message);
+
         void peerNotResponding(String uniqueName);
     }
 
-
-    private class HeartbeatSender extends TimerTask{
+    private class HeartbeatSender extends TimerTask {
         @Override
         public void run() {
             try {
@@ -75,7 +76,8 @@ public class NetHandler<T> {
             }
         }
     }
-    private class HeartbeatCounter extends TimerTask{
+
+    private class HeartbeatCounter extends TimerTask {
         @Override
         public void run() {
             checkIfHeartbeatsHaveBeenReceived();
@@ -84,14 +86,14 @@ public class NetHandler<T> {
     }
 
     private void checkIfHeartbeatsHaveBeenReceived() {
-        synchronized (knownPeers){
-            for (int i = 0; i < knownPeers.size(); i++){
+        synchronized (knownPeers) {
+            for (int i = 0; i < knownPeers.size(); i++) {
                 Peer peer = knownPeers.get(i);
                 if (peer == null)
                     return;
                 long now = System.currentTimeMillis();
                 long lastHeartbeat = lastTimeHeardFromPeer.get(peer);
-                if (now - lastHeartbeat > Constants.HEARTBEAT_TIMEOUT_MS){
+                if (now - lastHeartbeat > Constants.HEARTBEAT_TIMEOUT_MS) {
                     if (delegate != null)
                         delegate.peerNotResponding(peer.getName());
                     seenMessages.remove(peer);
@@ -103,11 +105,13 @@ public class NetHandler<T> {
         }
 
     }
-    private void startSendingHeartbeats(){
+
+    private void startSendingHeartbeats() {
         Timer timer = new Timer(true);
         timer.schedule(new HeartbeatSender(), 0, 1000);
         timer.schedule(new HeartbeatCounter(), 0, 500);
     }
+
     private void sendHeartbeat() throws IOException {
         NetMessage<T> netMessage = new NetMessage<>(NetMessageType.HEARTBEAT);
         sendNetMessage(netMessage);
@@ -116,23 +120,24 @@ public class NetHandler<T> {
     public String getLocalHost() {
         return ip;
     }
-    public int getLocalPort(){
+
+    public int getLocalPort() {
         return localPort;
     }
 
-    public String getUniqueName(){
+    public String getUniqueName() {
         return uniqueName;
     }
 
-    void removeConnection(Connection connection){
-        synchronized (connections){
+    void removeConnection(Connection connection) {
+        synchronized (connections) {
             connections.remove(connection);
         }
     }
 
     synchronized Connection addConnection(SocketChannel socketChannel) throws IOException {
         Connection connection = new Connection(socketChannel, NetHandler.this);
-        synchronized (connections){
+        synchronized (connections) {
             connections.add(connection);
         }
         return connection;
@@ -171,14 +176,14 @@ public class NetHandler<T> {
         }
     }
 
-
     synchronized void handleIncomingMessage(NetMessage<T> netMessage) throws IOException {
+        Logger.log("Handling incoming message " + netMessage);
         if (!isNewMessage(netMessage))
             return;
         broadcast(netMessage);
         switch (netMessage.getType()) {
             case MESSAGE:
-                if (delegate != null){
+                if (delegate != null) {
                     delegate.onNewMessage(netMessage.getContent());
                 }
                 break;
@@ -196,11 +201,11 @@ public class NetHandler<T> {
 
     private boolean isNewMessage(NetMessage netMessage) {
         boolean isNew = false;
-        if (seenMessages.containsKey(netMessage.getSender())){
+        if (seenMessages.containsKey(netMessage.getSender())) {
             int oldNumber = seenMessages.get(netMessage.getSender());
             if (oldNumber < netMessage.getNumber())
                 isNew = true;
-        }else{
+        } else {
             isNew = true;
         }
         if (isNew)
@@ -208,24 +213,22 @@ public class NetHandler<T> {
         return isNew;
     }
 
-
-
     public void sendMessage(T message) throws IOException {
         NetMessage<T> netMessage = new NetMessage<>(NetMessageType.MESSAGE);
         netMessage.setContent(message);
         sendNetMessage(netMessage);
     }
+
     private void sendNetMessage(NetMessage<T> netMessage) throws IOException {
-        synchronized (this){
+        synchronized (this) {
             netMessage.setNumber(sendMessageCounter++);
         }
         netMessage.setSender(peer);
         broadcast(netMessage);
     }
 
-
     public void startAcceptingIncomingConnections(CompletionHandler<Void, Void> completionHandler) {
-        try{
+        try {
             EventLoopGroup group = new NioEventLoopGroup();
             EventLoopGroup group2 = new NioEventLoopGroup();
 
@@ -234,22 +237,17 @@ public class NetHandler<T> {
                     .channel(NioServerSocketChannel.class);
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
-
                     socketChannel.pipeline().addLast(
                             new ObjectEncoder(),
                             new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                             addConnection(socketChannel));
-
                 }
             });
             ChannelFuture channelFuture = serverBootstrap.localAddress(localPort).bind().sync();
             completionHandler.completed(null, null);
             channelFuture.channel().closeFuture().sync();
-        }catch (Exception e){
+        } catch (Exception e) {
             completionHandler.failed(e, null);
         }
-
     }
-
-
 }

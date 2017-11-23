@@ -21,9 +21,10 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
         uniqueName = netHandler.getUniqueName();
     }
 
-    public String getUniqueName(){
+    public String getUniqueName() {
         return uniqueName;
     }
+
     @Override
     public void onNewMessage(Message message) {
         switch (message.getType()) {
@@ -65,7 +66,6 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
             netObserver.chatMessage(messageContent);
     }
 
-
     public void addNetObserver(NetObserver netObserver) {
         this.netObservers.add(netObserver);
     }
@@ -90,7 +90,6 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
     public int getLocalPort() {
         return netHandler.getLocalPort();
     }
-
 
     public void startAccepting(CompletionHandler<Void, Void> completionHandler) {
         netHandler.startAcceptingIncomingConnections(completionHandler);

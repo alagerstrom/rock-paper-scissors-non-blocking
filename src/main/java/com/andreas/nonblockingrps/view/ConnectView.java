@@ -58,7 +58,7 @@ public class ConnectView {
         AppController.getInstance().connectTo(remoteHostString, remotePort, new CompletionHandler<Void, Void>() {
             @Override
             public void completed(Void result, Void attachment) {
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     ViewCoordinator.getInstance().hideWindow(actionEvent);
                     enableControlsAndHideProgressBar();
                 });
@@ -66,7 +66,7 @@ public class ConnectView {
 
             @Override
             public void failed(Throwable exc, Void attachment) {
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     errorText.setText("Failed to connect");
                     enableControlsAndHideProgressBar();
                 });
@@ -84,7 +84,6 @@ public class ConnectView {
         connectGrid.setDisable(true);
         progressBar.setVisible(true);
     }
-
 
     public void initialize() {
         errorText.setText("");

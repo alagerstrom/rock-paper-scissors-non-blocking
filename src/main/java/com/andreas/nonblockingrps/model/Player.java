@@ -2,7 +2,7 @@ package com.andreas.nonblockingrps.model;
 
 import java.io.Serializable;
 
-public class Player implements Serializable{
+public class Player implements Serializable {
     private final String displayName;
     private final String uniqueName;
 

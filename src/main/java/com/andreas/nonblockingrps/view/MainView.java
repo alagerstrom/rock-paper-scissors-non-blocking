@@ -36,7 +36,6 @@ public class MainView {
     @FXML
     BorderPane borderPane;
 
-
     public void initialize() {
         printMessage("Rock Paper Scissors game started");
         Logger.log("Main view initialized");
@@ -60,13 +59,14 @@ public class MainView {
         appController.getPlayerName(new CompletionHandler<String, Void>() {
             @Override
             public void completed(String result, Void attachment) {
-                Platform.runLater(()->{
+                Platform.runLater(() -> {
                     nameText.setText(result);
                 });
             }
 
             @Override
-            public void failed(Throwable exc, Void attachment) { }
+            public void failed(Throwable exc, Void attachment) {
+            }
         });
     }
 
@@ -90,14 +90,12 @@ public class MainView {
         scissorsButton.setGraphic(scissors);
         scissorsButton.setText("");
 
-
     }
 
     private void updateScoreText(int roundScore, int totalScore) {
         totalText.setText(Constants.TOTAL_PREFIX + totalScore);
         roundText.setText(Constants.ROUND_PREFIX + roundScore);
     }
-
 
     @FXML
     public void sendChatMessage() {
@@ -123,34 +121,36 @@ public class MainView {
         appController.getLocalPort(new CompletionHandler<Integer, Void>() {
             @Override
             public void completed(Integer result, Void attachment) {
-                Platform.runLater(()->portText.setText("" + result));
+                Platform.runLater(() -> portText.setText("" + result));
             }
 
             @Override
-            public void failed(Throwable exc, Void attachment) { }
+            public void failed(Throwable exc, Void attachment) {
+            }
         });
         ipText.setText("[Getting...]");
         appController.getLocalHost(new CompletionHandler<String, Void>() {
             @Override
             public void completed(String result, Void attachment) {
-                Platform.runLater(()->ipText.setText(result));
+                Platform.runLater(() -> ipText.setText(result));
             }
 
             @Override
             public void failed(Throwable exc, Void attachment) {
-                Platform.runLater(()->ipText.setText("[No IP]"));
+                Platform.runLater(() -> ipText.setText("[No IP]"));
             }
         });
     }
 
-    private class PlayCompletionHandler implements CompletionHandler<Void, Void>{
+    private class PlayCompletionHandler implements CompletionHandler<Void, Void> {
         @Override
-        public void completed(Void result, Void attachment) { }
+        public void completed(Void result, Void attachment) {
+        }
 
         @Override
         public void failed(Throwable exc, Void attachment) {
             Logger.log("Failed to send");
-            Platform.runLater(()->enableButtons());
+            Platform.runLater(() -> enableButtons());
         }
     }
 
@@ -207,7 +207,7 @@ public class MainView {
 
         @Override
         public void draw() {
-            Platform.runLater(()-> statusText.setText("Draw!"));
+            Platform.runLater(() -> statusText.setText("Draw!"));
         }
 
         @Override
@@ -227,7 +227,7 @@ public class MainView {
 
         @Override
         public void newRound(int totalScore) {
-            Platform.runLater(()->{
+            Platform.runLater(() -> {
                 enableButtons();
                 updateScoreText(0, totalScore);
                 statusText.setText("Make your choice!");
@@ -240,7 +240,8 @@ public class MainView {
         paperButton.setDisable(false);
         scissorsButton.setDisable(false);
     }
-    private void disableButtons(){
+
+    private void disableButtons() {
         rockButton.setDisable(true);
         paperButton.setDisable(true);
         scissorsButton.setDisable(true);

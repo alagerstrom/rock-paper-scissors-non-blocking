@@ -44,11 +44,8 @@ public class AppController implements GameObserver {
                 }
             });
 
-
-
         });
     }
-
 
     public void connectTo(String host, int port, CompletionHandler<Void, Void> completionHandler) {
         CompletableFuture.runAsync(() -> {
@@ -89,9 +86,9 @@ public class AppController implements GameObserver {
         });
     }
 
-    public void sendRoundInfo(){
-        CompletableFuture.runAsync(()->{
-           Message message = new Message(MessageType.ROUND_INFO).setGameRound(game.getGameRound());
+    public void sendRoundInfo() {
+        CompletableFuture.runAsync(() -> {
+            Message message = new Message(MessageType.ROUND_INFO).setGameRound(game.getGameRound());
             try {
                 netDelegate.sendMessage(message);
             } catch (IOException e) {
@@ -99,6 +96,7 @@ public class AppController implements GameObserver {
             }
         });
     }
+
     public void sendPlayerInfo(CompletionHandler<Void, Void> nullableCompletionHandler) {
         CompletableFuture.runAsync(() -> {
             String playerName = game.getUniqueName();
