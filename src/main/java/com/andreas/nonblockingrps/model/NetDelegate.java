@@ -52,7 +52,6 @@ public class NetDelegate implements NetHandler.Delegate<Message> {
     public void peerNotResponding(String uniqueName) {
         for (NetObserver netObserver : netObservers)
             netObserver.playerNotResponding(uniqueName);
-
     }
 
     private void notifyPlayerObservers(Player player) {

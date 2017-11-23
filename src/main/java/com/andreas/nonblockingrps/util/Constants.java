@@ -9,5 +9,4 @@ public class Constants {
     public static final String IP_DELIMITER = "/";
     public static final int HEARTBEAT_TIMEOUT_MS = 3000;
     public static final int CONNECT_TIMEOUT_MS = 5000;
-    public static final int FAKE_NETWORK_DELAY = 0;
 }

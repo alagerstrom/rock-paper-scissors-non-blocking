@@ -24,6 +24,7 @@ public class Connection<T> extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        netHandler.removeConnection(this);
         cause.printStackTrace();
         ctx.close();
     }

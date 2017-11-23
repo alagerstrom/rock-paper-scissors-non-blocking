@@ -228,10 +228,10 @@ public class NetHandler<T> {
     }
 
     public void startAcceptingIncomingConnections(CompletionHandler<Void, Void> completionHandler) {
-        try {
-            EventLoopGroup group = new NioEventLoopGroup();
-            EventLoopGroup group2 = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup group2 = new NioEventLoopGroup();
 
+        try {
             ServerBootstrap serverBootstrap = new ServerBootstrap()
                     .group(group, group2)
                     .channel(NioServerSocketChannel.class);

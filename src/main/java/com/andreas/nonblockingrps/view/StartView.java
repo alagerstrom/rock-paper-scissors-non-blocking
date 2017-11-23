@@ -60,7 +60,7 @@ public class StartView {
             public void completed(Void result, Void attachment) {
                 Platform.runLater(() -> {
                     ViewCoordinator viewCoordinator = ViewCoordinator.getInstance();
-                    viewCoordinator.showView(ViewPath.MAIN_VIEW);
+                    viewCoordinator.showMainView();
                     viewCoordinator.showView(ViewPath.CONNECT_VIEW);
                     viewCoordinator.hideWindow(actionEvent);
                 });

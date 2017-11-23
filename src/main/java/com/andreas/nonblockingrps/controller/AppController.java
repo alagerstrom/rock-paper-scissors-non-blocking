@@ -24,8 +24,7 @@ public class AppController implements GameObserver {
     }
 
     public void createNewGame(String playerName, int port, CompletionHandler<Void, Void> completionHandler) {
-        CompletableFuture.runAsync(() -> {
-
+        Thread thread = new Thread(() -> {
             netDelegate = new NetDelegate(port);
 
             netDelegate.startAccepting(new CompletionHandler<Void, Void>() {
@@ -43,74 +42,65 @@ public class AppController implements GameObserver {
                     completionHandler.failed(exc, null);
                 }
             });
-
         });
+        thread.setDaemon(true);
+        thread.start();
+
     }
 
     public void connectTo(String host, int port, CompletionHandler<Void, Void> completionHandler) {
-        CompletableFuture.runAsync(() -> {
-            netDelegate.getLocalHost();
-            try {
-                netDelegate.connectTo(host, port);
-                sendPlayerInfo(new CompletionHandler<Void, Void>() {
-                    @Override
-                    public void completed(Void result, Void attachment) {
-                        completionHandler.completed(null, null);
-                    }
+        try {
+            netDelegate.connectTo(host, port);
+            sendPlayerInfo(new CompletionHandler<Void, Void>() {
+                @Override
+                public void completed(Void result, Void attachment) {
+                    completionHandler.completed(null, null);
+                }
 
-                    @Override
-                    public void failed(Throwable exc, Void attachment) {
-                        completionHandler.failed(exc, null);
-                    }
-                });
-            } catch (IOException e) {
-                completionHandler.failed(e, null);
-            }
-        });
+                @Override
+                public void failed(Throwable exc, Void attachment) {
+                    completionHandler.failed(exc, null);
+                }
+            });
+        } catch (IOException e) {
+            completionHandler.failed(e, null);
+        }
     }
 
     public void getLocalHost(CompletionHandler<String, Void> completionHandler) {
-        CompletableFuture.runAsync(() -> {
-            String localHost = netDelegate.getLocalHost();
-            String tokens[] = localHost.split(Constants.IP_DELIMITER);
-            if (tokens.length < 1)
-                completionHandler.failed(new Exception(), null);
-            completionHandler.completed(tokens[tokens.length - 1], null);
-        });
+        String localHost = netDelegate.getLocalHost();
+        String tokens[] = localHost.split(Constants.IP_DELIMITER);
+        if (tokens.length < 1)
+            completionHandler.failed(new Exception(), null);
+        completionHandler.completed(tokens[tokens.length - 1], null);
     }
 
     public void getLocalPort(CompletionHandler<Integer, Void> completionHandler) {
-        CompletableFuture.runAsync(() -> {
-            int port = netDelegate.getLocalPort();
-            completionHandler.completed(port, null);
-        });
+        int port = netDelegate.getLocalPort();
+        completionHandler.completed(port, null);
     }
 
     public void sendRoundInfo() {
-        CompletableFuture.runAsync(() -> {
-            Message message = new Message(MessageType.ROUND_INFO).setGameRound(game.getGameRound());
-            try {
-                netDelegate.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Message message = new Message(MessageType.ROUND_INFO).setGameRound(game.getGameRound());
+        try {
+            netDelegate.sendMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendPlayerInfo(CompletionHandler<Void, Void> nullableCompletionHandler) {
-        CompletableFuture.runAsync(() -> {
-            String playerName = game.getUniqueName();
-            Message message = new Message(MessageType.PLAYER_INFO)
-                    .setContent(playerName);
-            try {
-                netDelegate.sendMessage(message.setSender(game.getPlayer()));
-                if (nullableCompletionHandler != null)
-                    nullableCompletionHandler.completed(null, null);
-            } catch (IOException e) {
-                if (nullableCompletionHandler != null)
-                    nullableCompletionHandler.failed(e, null);
-            }
-        });
+        String playerName = game.getUniqueName();
+        Message message = new Message(MessageType.PLAYER_INFO)
+                .setContent(playerName);
+        try {
+            netDelegate.sendMessage(message.setSender(game.getPlayer()));
+            if (nullableCompletionHandler != null)
+                nullableCompletionHandler.completed(null, null);
+        } catch (IOException e) {
+            if (nullableCompletionHandler != null)
+                nullableCompletionHandler.failed(e, null);
+        }
     }
 
     public void sendChatMessage(String messageContent, CompletionHandler<Void, Void> completionHandler) {
@@ -148,16 +138,12 @@ public class AppController implements GameObserver {
     }
 
     public void addGameObserver(GameObserver gameObserver) {
-        CompletableFuture.runAsync(() -> {
-            game.addGameObserver(gameObserver);
-        });
+        game.addGameObserver(gameObserver);
     }
 
     public void getPlayerName(CompletionHandler<String, Void> completionHandler) {
-        CompletableFuture.runAsync(() -> {
-            String result = game.getDisplayName();
-            completionHandler.completed(result, null);
-        });
+        String result = game.getDisplayName();
+        completionHandler.completed(result, null);
     }
 
     @Override

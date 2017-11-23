@@ -10,5 +10,4 @@ public enum ViewPath {
     ViewPath(String s) {
         this.name = s;
     }
-
 }
